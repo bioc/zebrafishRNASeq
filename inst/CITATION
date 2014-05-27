@@ -1,0 +1,29 @@
+citHeader("To cite this dataset in publications, please use:")
+desc <- packageDescription("zebrafishRNASeq")
+year <- 2014
+vers <- paste("R package version", desc$Version)
+title <- paste("Silencing of odorant receptor genes by G protein ", expression(beta), expression(gamma), " signaling ensures the expression of one odorant receptor per olfactory sensory neuron", sep="")
+journal <- "Neuron"
+volume <- "81"
+page <- "847-859"
+citEntry(entry="article",
+         title = title,
+         author = personList(
+	 as.person("Todd Ferreira"),
+	 as.person("Sarah R Wilson"),
+ 	 as.person("Yoon G Choi"),
+	 as.person("Davide Risso"),
+         as.person("Sandrine Dudoit"),
+	 as.person("Terence P Speed"),
+	 as.person("John Ngai")
+	 ),
+         year = year,
+	 journal = journal,
+         volume = volume,
+         page = page,
+         note = vers,
+	  textVersion = 
+           c(paste("T. Ferreira, S.R. Wilson, Y.G. Choi, D. Risso, S. Dudoit, T.P. Speed, J. Ngai",
+                   " (", year, "). ", title, ".", sep = ""),
+             paste(journal, ", ", volume, ":", page, ".", sep = "")
+	      ))

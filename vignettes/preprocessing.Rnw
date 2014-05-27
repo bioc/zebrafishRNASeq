@@ -1,0 +1,90 @@
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Pre-Processing for the Zebrafish RNA-Seq Gene-Level Counts}
+\documentclass{article}
+
+<<style-knitr, eval=TRUE, echo=FALSE, results="asis">>=
+BiocStyle::latex()
+@
+
+\usepackage{url}
+\usepackage[numbers,sort&compress]{natbib}
+
+\title{Pre-Processing for the Zebrafish RNA-Seq Gene-Level Counts}
+\author{Davide Risso}
+
+\date{Modified: April 13, 2014.  Compiled: \today.}
+
+\begin{document}
+
+\maketitle
+
+This vignette describes the pre-processing steps that were followed for
+the generation of the gene-level read counts contained in the \Bioconductor{} package
+\Biocpkg{zebrafishRNASeq}.
+
+\tableofcontents
+
+\section{Sample preparation and sequencing}
+
+Olfactory sensory neurons were isolated from three pairs of
+gallein-treated and control embryonic zebrafish pools and purified by
+fluorescence activated cell sorting (FACS)
+\cite{ferreira2014silencing}.  Each RNA sample was enriched in
+poly(A)+ RNA from 10--30 ng total RNA and 1 $\mu$L (1:1000 dilution) of Ambion ERCC ExFold RNA Spike-in Control Mix 1 was added to 30 ng of total RNA before mRNA isolation. cDNA libraries were prepared
+according to manufacturer's protocol.
+The six libraries were sequenced in two multiplex runs on an Illumina HiSeq2000 sequencer,
+yielding approximately 50 million 100bp paired-end reads per
+library. 
+
+\section{Read alignment and expression quantitation}
+
+We made use of a custom reference sequence,
+defined as the union of the zebrafish reference genome (Zv9,
+downloaded from Ensembl \cite{flicek2012ensembl}, v. 67) and the ERCC
+spike-in sequences
+(\url{http://tools.invitrogen.com/downloads/ERCC92.fa}).  Reads were
+mapped with TopHat \cite{trapnell2009tophat} (v. 2.0.4), with the
+following parameters,
+\begin{verbatim}
+--library-type=fr-unstranded -G ensembl.gtf --transcriptome-index=transcript --no-novel-juncs 
+\end{verbatim}
+where \texttt{ensembl.gtf} is a GTF file containing Ensembl gene
+annotation.
+
+Gene-level read counts were obtained using the htseq-count python script \cite{htseq} in the ``union'' mode and Ensembl (v. 67) gene annotation.
+
+After verifying that there were no run-specific biases, we used the sums of the counts of the two runs as the expression measures for each library.
+
+\section{Loading the zebrafish data into \R{}}
+
+To load the gene-level read counts into \R{}, simply type
+
+<<loadData, eval=TRUE, results="markup">>=
+library(zebrafishRNASeq)
+data(zfGenes)
+
+head(zfGenes)
+@ 
+
+The ERCC spike-in read counts are in the last rows of the same matrix
+and can be retrieved in the following way.
+
+<<ercc, eval=TRUE, results="markup">>=
+spikes <- zfGenes[grep("^ERCC", rownames(zfGenes)),]
+head(spikes)
+@ 
+
+The typical use of this dataset is the indentification of differentially expressed genes between control (Ctl) and treated (Trt) samples. For additional details, exploratory analysis, and normalization of the zebrafish data see \cite{risso2014ruv,risso2014role}. The data are used as a case study for the \Bioconductor{} package
+\Biocpkg{RUVSeq}.
+
+
+
+\section{Session info}
+
+<<sessionInfo, results="asis">>=
+toLatex(sessionInfo())
+@ 
+
+\bibliography{biblio}
+
+\end{document}
