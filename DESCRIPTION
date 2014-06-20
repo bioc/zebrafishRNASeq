@@ -1,6 +1,6 @@
 Package: zebrafishRNASeq
 Title: Zebrafish RNA-Seq Experimental Data from Ferreira et al. (2014)
-Version: 0.99.2
+Version: 0.99.3
 Author: Davide Risso
 Description: Gene-level read counts from RNA-Seq for gallein-treated
         and control zebrafish.
@@ -8,5 +8,5 @@ biocViews: ExperimentData, RNAseqData
 Maintainer: Davide Risso <risso.davide@gmail.com>
 License: GPL
 VignetteBuilder: knitr
-Suggests: BiocStyle
+Suggests: BiocStyle, knitr
 Depends: R (>= 2.10)
